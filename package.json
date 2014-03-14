@@ -11,5 +11,5 @@
     "libnfc"
   ],
   "author": "Andrew Jenkins",
-  "license": "BSD"
+  "license": "MIT (node module) and LGPL (libnfc)"
 }
