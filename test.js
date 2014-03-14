@@ -22,3 +22,7 @@ console.log("NFC: ", nfc);
 
 console.log("NFC version:", nfc.version());
 
+var nfcContext = new nfc.Context();
+console.log("About to open", nfcContext);
+nfcContext.open();
+console.log("Opened");

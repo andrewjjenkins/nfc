@@ -18,28 +18,30 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+#ifndef CONTEXT_HH
+#define CONTEXT_HH
+
 #include <node.h>
 #include <v8.h>
 #include <nfc/nfc.h>
 
-#include "context.hh"
-
-class NFC {
+class NfcContext : public node::ObjectWrap {
  public:
-  static v8::Handle<v8::Value> version(const v8::Arguments &args);
+  NfcContext();
+  virtual ~NfcContext();
+  static void init(v8::Handle<v8::Object> exports);
+
+ private:  
+  // Javascript methods
+  static v8::Handle<v8::Value> newInstance(const v8::Arguments &args);
+  static v8::Handle<v8::Value> open(const v8::Arguments &args);
+
+  // Singeton javascript helpers
+  static v8::Persistent<v8::Function> constructor_;
+
+  // State
+  nfc_context *nfcContext_;
+  nfc_device *nfcDevice_;
 };
 
-v8::Handle<v8::Value> NFC::version(const v8::Arguments &args) {
-  v8::HandleScope scope;
-  const char *cVer = nfc_version();
-  v8::Handle<v8::String> ver(v8::String::NewSymbol(cVer));
-  return scope.Close(ver);
-}
-
-void init(v8::Handle<v8::Object> exports) {
-  exports->Set(v8::String::NewSymbol("version"),
-      v8::FunctionTemplate::New(NFC::version)->GetFunction());
-  NfcContext::init(exports);
-}
-
-NODE_MODULE(nfc, init)
+#endif // CONTEXT_HH
