@@ -9,6 +9,18 @@ Status
 **UNDER DEVELOPMENT**.  It will open the device using libusb right now, but
 there isn't much useful beyond that.  (See test.js)
 
+Usage
+=====
+
+```
+sudo apt-get install libusb-dev
+git clone https://github.com/andrewjjenkins/nfc
+cd nfc
+npm install
+(plug in an NFC reader that's compatible with libnfc)
+node test.js
+```
+
 LICENSE
 =======
 The nfc node module, documentation, tests, and build scripts are licensed
