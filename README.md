@@ -3,6 +3,12 @@ nfc
 
 A node module that uses libnfc to interface with NFC reader/writers.
 
+Status
+======
+
+**UNDER DEVELOPMENT**.  It will open the device using libusb right now, but
+there isn't much useful beyond that.  (See test.js)
+
 LICENSE
 =======
 The nfc node module, documentation, tests, and build scripts are licensed
