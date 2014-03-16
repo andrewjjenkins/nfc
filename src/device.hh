@@ -18,32 +18,39 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+#ifndef DEVICE_HH
+#define DEVICE_HH
+
 #include <node.h>
 #include <v8.h>
 #include <nfc/nfc.h>
 
-#include "context.hh"
-#include "device.hh"
+class NfcContext;
 
-class NFC {
+class NfcDevice : public node::ObjectWrap {
  public:
-  static v8::Handle<v8::Value> version(const v8::Arguments &args);
+  NfcDevice(NfcContext *c, nfc_device *d);
+  virtual ~NfcDevice(); //FIXME free device
+  static void init(v8::Handle<v8::Object> exports);
+
+  static v8::Handle<v8::Value> makeNewInstance(NfcContext *c, nfc_device *d);
+
+  NfcContext *parent() const { return nfcContext_; }
+
+ private:  
+  // Javascript methods
+  static v8::Handle<v8::Value> newInstance(const v8::Arguments &args);
+  static v8::Handle<v8::Value> initiatorInit(const v8::Arguments &args);
+  static v8::Handle<v8::Value> initiatorListPassiveTargets(const v8::Arguments &args);
+
+  // Singeton javascript helpers
+  static v8::Persistent<v8::Function> constructor_;
+
+  nfc_device *nfcDevice() const { return nfcDevice_; }
+
+  // State
+  NfcContext *nfcContext_;
+  nfc_device *nfcDevice_;
 };
 
-v8::Handle<v8::Value> NFC::version(const v8::Arguments &args) {
-  v8::HandleScope scope;
-  const char *cVer = nfc_version();
-  v8::Handle<v8::String> ver(v8::String::NewSymbol(cVer));
-  return scope.Close(ver);
-}
-
-void init(v8::Handle<v8::Object> exports) {
-  exports->Set(v8::String::NewSymbol("version"),
-      v8::FunctionTemplate::New(NFC::version)->GetFunction());
-  exports->Set(v8::String::NewSymbol("NFC_BUFSIZE_CONNSTRING"),
-               v8::Integer::New(NFC_BUFSIZE_CONNSTRING));
-  NfcContext::init(exports);
-  NfcDevice::init(exports);
-}
-
-NODE_MODULE(nfc, init)
+#endif // DEVICE_HH

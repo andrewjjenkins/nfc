@@ -16,7 +16,12 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-var nfc = require('./build/Release/nfc.node');
+var nfc;
+try {
+  nfc = require('./build/Release/nfc.node');
+} catch (e) {
+  nfc = require('./build/Debug/nfc.node');
+}
 
 console.log("NFC: ", nfc);
 
@@ -24,5 +29,8 @@ console.log("NFC version:", nfc.version());
 
 var nfcContext = new nfc.Context();
 console.log("About to open", nfcContext);
-nfcContext.open();
-console.log("Opened");
+nfcContext.open("", function (err, nfcDev) {
+  console.log("Error:", err);
+  console.log("Opened:", nfcDev);
+});
+console.log("Open call submitted");

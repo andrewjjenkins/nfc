@@ -31,17 +31,22 @@ class NfcContext : public node::ObjectWrap {
   virtual ~NfcContext();
   static void init(v8::Handle<v8::Object> exports);
 
+  nfc_context *nfcContext() const { return nfcContext_; }
+
  private:  
   // Javascript methods
   static v8::Handle<v8::Value> newInstance(const v8::Arguments &args);
   static v8::Handle<v8::Value> open(const v8::Arguments &args);
 
-  // Singeton javascript helpers
+  // uv work methods
+  static void doOpen(uv_work_t *req);
+  static void afterOpen(uv_work_t *req, int status);
+
+  // Singleton javascript helpers
   static v8::Persistent<v8::Function> constructor_;
 
   // State
   nfc_context *nfcContext_;
-  nfc_device *nfcDevice_;
 };
 
 #endif // CONTEXT_HH

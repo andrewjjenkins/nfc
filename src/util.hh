@@ -18,32 +18,29 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+#ifndef UTIL_HH
+#define UTIL_HH
+
 #include <node.h>
 #include <v8.h>
-#include <nfc/nfc.h>
 
-#include "context.hh"
-#include "device.hh"
+// Error objects for passing to callbacks
+#define RUN_ERROR(msg)                                                        \
+  v8::Exception::Error(v8::String::NewSymbol(("NFC runtime error: " msg)))
+#define TYPE_ERROR(msg)                                                       \
+  v8::Exception::TypeError(v8::String::NewSymbol(("NFC type error: " msg)))
+#define UNIMPL_ERROR()                                                        \
+  v8::Exception::Error(v8::String::NewSymbol(("NFC unimplemented")))
 
-class NFC {
- public:
-  static v8::Handle<v8::Value> version(const v8::Arguments &args);
-};
+// Throwing synchronous errors
+#define THROW_RUN_ERROR(msg)      v8::ThrowException(RUN_ERROR(msg));
+#define THROW_TYPE_ERROR(msg)     v8::ThrowException(TYPE_ERROR(msg));
+#define THROW_UNIMPL_ERROR()      v8::ThrowException(UNIMPL_ERROR());
 
-v8::Handle<v8::Value> NFC::version(const v8::Arguments &args) {
-  v8::HandleScope scope;
-  const char *cVer = nfc_version();
-  v8::Handle<v8::String> ver(v8::String::NewSymbol(cVer));
-  return scope.Close(ver);
-}
+// Misc error helpers
+#define ERROR_UNLESS_CONSTRUCTOR_CALL(args)                                   \
+  if (!args.IsConstructCall()) {                                              \
+    THROW_TYPE_ERROR("Not called as constructor");                            \
+  }                                                                           \
 
-void init(v8::Handle<v8::Object> exports) {
-  exports->Set(v8::String::NewSymbol("version"),
-      v8::FunctionTemplate::New(NFC::version)->GetFunction());
-  exports->Set(v8::String::NewSymbol("NFC_BUFSIZE_CONNSTRING"),
-               v8::Integer::New(NFC_BUFSIZE_CONNSTRING));
-  NfcContext::init(exports);
-  NfcDevice::init(exports);
-}
-
-NODE_MODULE(nfc, init)
+#endif // UTIL_HH
