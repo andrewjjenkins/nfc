@@ -12,5 +12,8 @@
     "libnfc"
   ],
   "author": "Andrew Jenkins",
-  "license": "MIT (node module) and LGPL (libnfc)"
+  "license": "MIT"
+  "dependencies": {
+    "usb": "~0.3.11",
+  }
 }

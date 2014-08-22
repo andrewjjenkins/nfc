@@ -17,7 +17,7 @@ sudo apt-get install libusb-dev
 git clone https://github.com/andrewjjenkins/nfc
 cd nfc
 npm install
-(plug in an NFC reader that's compatible with libnfc)
+(plug in an NFC reader that's compatible, currently ACR122)
 node test.js
 ```
 
@@ -45,7 +45,3 @@ under the MIT license:
   LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
-
-The libnfc library is a dependency that is distributed with the nfc module for
-convenience.  It is licensed under the Lesser GPL version 3 (see
-libnfc/COPYING).
