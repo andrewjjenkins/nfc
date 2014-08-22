@@ -12,7 +12,7 @@
     "libnfc"
   ],
   "author": "Andrew Jenkins",
-  "license": "MIT"
+  "license": "MIT",
   "dependencies": {
     "usb": "~0.3.11",
     "winston": "~0.7.3",
