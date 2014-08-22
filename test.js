@@ -17,7 +17,17 @@
 // THE SOFTWARE.
 
 var nfc = require('./lib/nfc');
+var pn53x = require('./lib/devices/pn53x');
 
 nfc.open(function (err, nfc) {
   console.log('Opened:', nfc);
+  pn53x.powerOn(nfc, function (err, data) {
+    console.log('Power on done:', err, data);
+    pn53x.redLedOn(nfc, function (err) {
+      if (err) {
+        console.log('Error getting firmware version:', err);
+      }
+      setTimeout(function () { console.log('Timeout done'); }, 2000);
+    });
+  });
 });
