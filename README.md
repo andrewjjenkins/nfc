@@ -9,6 +9,8 @@ Status
 **UNDER DEVELOPMENT**.  It will open the device using libusb right now, but
 there isn't much useful beyond that.  (See test.js)
 
+It is also chatty, and will log to your console.
+
 Usage
 =====
 
@@ -20,6 +22,18 @@ npm install
 (plug in an NFC reader that's compatible, currently ACR122)
 node test.js
 ```
+
+## API
+
+```
+var nfc = require('nfc');
+```
+
+### nfc.open(cb)
+
+Walk the list of devices (in lib/devices.js), trying to open each one.  If
+one succeeds, call the callback with the opened device.  If none can be
+successfully opened, call the callback with an error.
 
 LICENSE
 =======
