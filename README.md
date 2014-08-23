@@ -1,7 +1,7 @@
 nfc
 ===
 
-A node module that uses libusb to interface with NFC reader/writers.
+A node module that uses libnfc to interface with NFC reader/writers.
 
 Status
 ======
@@ -99,6 +99,24 @@ callback as an ASCII string.
 
 If `on` is truthy, tells the ACR122 to buzz the buzzer when a card is near and
 it is ready to read.
+
+### acr122.setPICC([options], cb)
+
+Sets the PICC mode to start polling cards from the reader.
+
+Options:
+
+- `auto`: Enable auto PICC polling (default: `true`)
+- `autoAts`: Automatically issue ATS requests whenever an ISO14443-4 Type A tag
+  is activated.  If enabled, prevents reading MiFARE tags.  Default: `false`.
+- `pollingInterval`: Polling interval in milliseconds; only 250ms and 500ms are
+  supported (default: `250`).
+- `felica424k`: Detect FeliCa 424K tags (default: `true`).
+- `felica424k`: Detect FeliCa 212K tags (default: `true`).
+- `topaz`: Detect topaz tags (default: `true`).
+- `iso14443B`: Detect ISO14443 Type B tags (default: `true`).
+- `iso14443A`: Detect ISO14443-4 Type A tags (default: `true`).  Must be
+  `true`, and `autoAts` must be `false`, for reading MiFARE tags.
 
 LICENSE
 =======
