@@ -19,11 +19,11 @@
 var nfc = require('./lib/nfc');
 var acr122 = require('./lib/devices/acr122');
 
-nfc.open(function (err, nfc) {
-  console.log('Opened:', nfc);
-  acr122.powerOn(nfc, function (err, data) {
+nfc.open(function (err, dev) {
+  console.log('Opened:', dev);
+  dev.powerOn(function (err, data) {
     console.log('Power on done:', err, data);
-    acr122.redLedOn(nfc, function (err) {
+    dev.redLedOn(function (err) {
       if (err) {
         console.log('Error getting firmware version:', err);
       }
