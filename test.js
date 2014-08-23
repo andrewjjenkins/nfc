@@ -29,6 +29,8 @@ nfc.open(function (err, dev) {
     if (err) {
       console.log('Error blinking LED:', err);
     }
-    setTimeout(function () { console.log('Timeout done'); }, 2000);
+    dev.getFirmwareVersion(function (err, version) {
+      console.log('Version:', version);
+    });
   });
 });
