@@ -95,6 +95,10 @@ callback as an ASCII string.
     device.getFirmwareVersion(function (err, version) {
       console.log('Version:', version); // Version: ACR122U213
 
+### acr122.setCardBuzzer(on, cb)
+
+If `on` is truthy, tells the ACR122 to buzz the buzzer when a card is near and
+it is ready to read.
 
 LICENSE
 =======
