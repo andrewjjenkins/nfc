@@ -17,17 +17,17 @@
 // THE SOFTWARE.
 
 var nfc = require('./lib/nfc');
-var acr122 = require('./lib/devices/acr122');
 
 nfc.open(function (err, dev) {
   console.log('Opened:', dev);
-  dev.powerOn(function (err, data) {
-    console.log('Power on done:', err, data);
-    dev.redLedOn(function (err) {
-      if (err) {
-        console.log('Error getting firmware version:', err);
-      }
-      setTimeout(function () { console.log('Timeout done'); }, 2000);
-    });
+  dev.setLedAndBuzzer({ red: true,
+                        green: false,
+                        blinkDuration: 400,
+                        blinkCount: 3,
+                        buzzer: true }, function (err) {
+    if (err) {
+      console.log('Error blinking LED:', err);
+    }
+    setTimeout(function () { console.log('Timeout done'); }, 2000);
   });
 });

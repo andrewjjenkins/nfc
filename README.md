@@ -6,8 +6,8 @@ A node module that uses libnfc to interface with NFC reader/writers.
 Status
 ======
 
-**UNDER DEVELOPMENT**.  It will open the device using libusb right now, but
-there isn't much useful beyond that.  (See test.js)
+**UNDER DEVELOPMENT**.  It can blink LEDs and beep on ACR122 NFC
+reader/writers, but there isn't much useful beyond that.  (See test.js)
 
 It is also chatty, and will log to your console.
 
@@ -27,6 +27,13 @@ node test.js
 
 ```
 var nfc = require('nfc');
+nfc.open(function (err, device) {
+  if (err) {
+    throw err;
+  }
+  console.log('Opened NFC device:', device);
+  device.setLed({red: true}, function (err, data) { ... });
+});
 ```
 
 ### nfc.open(cb)
