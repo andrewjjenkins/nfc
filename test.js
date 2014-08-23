@@ -19,7 +19,7 @@
 var nfc = require('./lib/nfc');
 
 nfc.open(function (err, dev) {
-  console.log('Opened:', dev);
+  console.log('Opened:', err, dev);
   dev.setLedAndBuzzer({ red: true,
                         green: false,
                         blinkDuration: 500,
@@ -29,8 +29,15 @@ nfc.open(function (err, dev) {
     if (err) {
       console.log('Error blinking LED:', err);
     }
-    dev.getFirmwareVersion(function (err, version) {
-      console.log('Version:', version);
+    dev.setCardBuzzer(true, function (err, result) {
+      console.log('err: %s, result: %s', err, result);
+      dev.getFirmwareVersion(function (err, version) {
+        console.log('Version:', version);
+        dev.setPICC(function (err, result) {
+          console.log('Set PICC:', err, result);
+          setTimeout(function () { console.log('timeout'); }, 5000);
+        });
+      });
     });
   });
 });
