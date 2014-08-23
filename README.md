@@ -42,19 +42,19 @@ Walk the list of devices (in lib/devices.js), trying to open each one.  If
 one succeeds, call the callback with the opened device.  If none can be
 successfully opened, call the callback with an error.
 
-## API (ARC122)
+## API (ACR122)
 
 Devices have device-specific APIs.  Currently, the only supported device is the
-ARC122.
+ACR122.
 
-### arc122.powerOn(cb)
+### acr122.powerOn(cb)
 
 Sends a command to power on the device.  This is automatically done as part of
 the device opening and initialization.  You only have to call it if you power
 down the device.
 
-### arc122.setLedAndBuzzer(options, cb)
-### arc122.setLed(options, cb)
+### acr122.setLedAndBuzzer(options, cb)
+### acr122.setLed(options, cb)
 
 Turns the red and/or green LEDs on and off, and optionally blinks them along
 with the buzzer.  There are two modes: blinking mode and non-blinking mode.
@@ -87,13 +87,13 @@ with 300 ms on and 200 ms off, with the buzzer sounding:
     device.setLedAndBuzzer({red: true, green: true, blinkDuration: 500,
                             blinkDutyCycle: 0.6, blinkCount: 3, buzzer: true });
 
-### arc122.getFirmwareVersion(cb)
+### acr122.getFirmwareVersion(cb)
 
-Reads the firmware version from the ARC122 device and delivers it to the
+Reads the firmware version from the ACR122 device and delivers it to the
 callback as an ASCII string.
 
     device.getFirmwareVersion(function (err, version) {
-      console.log('Version:', version); // Version: ARC122U213
+      console.log('Version:', version); // Version: ACR122U213
 
 
 LICENSE
