@@ -42,6 +42,60 @@ Walk the list of devices (in lib/devices.js), trying to open each one.  If
 one succeeds, call the callback with the opened device.  If none can be
 successfully opened, call the callback with an error.
 
+## API (ARC122)
+
+Devices have device-specific APIs.  Currently, the only supported device is the
+ARC122.
+
+### arc122.powerOn(cb)
+
+Sends a command to power on the device.  This is automatically done as part of
+the device opening and initialization.  You only have to call it if you power
+down the device.
+
+### arc122.setLedAndBuzzer(options, cb)
+### arc122.setLed(options, cb)
+
+Turns the red and/or green LEDs on and off, and optionally blinks them along
+with the buzzer.  There are two modes: blinking mode and non-blinking mode.
+Non-blinking mode just turns the LEDs on and off; to use non-blinking mode,
+don't pass any of the blink-related options.  Blinking mode will blink the LEDs
+and optionally the buzzer according to the options, and then stop with the LEDs
+and buzzer off.
+
+Options:
+
+- `red`: Turn the red LED on (non-blinking mode), or blink the red LED
+  (blinking mode).  Both `red` and `green` can be set.
+- `green`: Turn the green LED on (non-blinking mode), or blink the green LED
+  (blinking mode).  Both `red` and `green` can be set.
+- `blinkDuration`: Duration to blink the LED in milliseconds, precision is
+  100ms.  Minimum duration is 100ms.
+- `blinkDutyCycle`: Proportion of the `blinkDuration` that the LEDs should be
+  on and (optionally) the buzzer buzzing.  Between 0 and 1, defaults to 0.5
+(50%).
+- `blinkCount`: Number of times to repeat blink.  Defaults to 2.
+- `buzzer`: Sound the buzzer when blinking.
+
+Example of turning the red LED on forever:
+
+    device.setLed({red: true }, cb);
+
+Example of blinking the red and green LEDs (making a yellow light) 3 times,
+with 300 ms on and 200 ms off, with the buzzer sounding:
+
+    device.setLedAndBuzzer({red: true, green: true, blinkDuration: 500,
+                            blinkDutyCycle: 0.6, blinkCount: 3, buzzer: true });
+
+### arc122.getFirmwareVersion(cb)
+
+Reads the firmware version from the ARC122 device and delivers it to the
+callback as an ASCII string.
+
+    device.getFirmwareVersion(function (err, version) {
+      console.log('Version:', version); // Version: ARC122U213
+
+
 LICENSE
 =======
 The nfc node module, documentation, tests, and build scripts are licensed

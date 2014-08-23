@@ -22,7 +22,8 @@ nfc.open(function (err, dev) {
   console.log('Opened:', dev);
   dev.setLedAndBuzzer({ red: true,
                         green: false,
-                        blinkDuration: 400,
+                        blinkDuration: 500,
+                        blinkDutyCycle: 0.6,
                         blinkCount: 3,
                         buzzer: true }, function (err) {
     if (err) {
