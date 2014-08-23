@@ -1,7 +1,7 @@
 nfc
 ===
 
-A node module that uses libnfc to interface with NFC reader/writers.
+A node module that uses libusb to interface with NFC reader/writers.
 
 Status
 ======
