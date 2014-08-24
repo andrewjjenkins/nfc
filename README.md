@@ -23,7 +23,18 @@ npm install
 node test.js
 ```
 
-## API
+## API (generic)
+
+There will be a top-level abstraction for opening readers, telling those
+readers what kinds of cards to listen for, programming secure exchange keys,
+etc.  It should be device agnostic.  This is currently a work-in-progress, I
+only own one device so the correct abstraction is not clear to me yet.
+
+Every device should have:
+
+- Totally generic methods and events: `init()`, `.on('card', ...)`
+- Device-specific routines: `setLed()`
+- Chip-specific routines: `inListPassiveTarget()`
 
 ```
 var nfc = require('nfc');
@@ -42,10 +53,11 @@ Walk the list of devices (in lib/devices.js), trying to open each one.  If
 one succeeds, call the callback with the opened device.  If none can be
 successfully opened, call the callback with an error.
 
-## API (ACR122)
+## API (Device: ACR122)
 
 Devices have device-specific APIs.  Currently, the only supported device is the
-ACR122.
+ACR122.  The ACR122 has a PN532 chip on it, so it also inherits all of the
+pn53x methods.
 
 ### acr122.powerOn(cb)
 
@@ -87,7 +99,7 @@ with 300 ms on and 200 ms off, with the buzzer sounding:
     device.setLedAndBuzzer({red: true, green: true, blinkDuration: 500,
                             blinkDutyCycle: 0.6, blinkCount: 3, buzzer: true });
 
-### acr122.getFirmwareVersion(cb)
+### acr122.getDeviceFirmwareVersion(cb)
 
 Reads the firmware version from the ACR122 device and delivers it to the
 callback as an ASCII string.
@@ -117,6 +129,29 @@ Options:
 - `iso14443B`: Detect ISO14443 Type B tags (default: `true`).
 - `iso14443A`: Detect ISO14443-4 Type A tags (default: `true`).  Must be
   `true`, and `autoAts` must be `false`, for reading MiFARE tags.
+
+## API (Chip: pn53x)
+
+### pn53x.getChipFirmwareVersion(cb)
+
+Gets the chip firmware version.  The `raw` object is the bytes read off the
+wire, in case future chips are not compatible with the decoding routine
+(patches strongly desired in this case).  `function cb(err, result)` gets a
+result that looks like:
+
+    { ic: 'PN532',
+      version: '1.6',
+      iso18092: true,
+      iso18443B: true,
+      iso18443A: true,
+      raw : {
+        d503: 54531,
+        icRaw: 50,
+        verRaw: 1,
+        revRaw: 6,
+        supportRaw: 7,
+        errorStatusRaw: 144 }
+    }
 
 LICENSE
 =======

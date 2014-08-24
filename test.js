@@ -17,27 +17,43 @@
 // THE SOFTWARE.
 
 var nfc = require('./lib/nfc');
+var async = require('async');
+
+function resultPrinter(command, label) {
+  return function (cb) {
+    function printResult(err, result) {
+      if (err) {
+        console.log('(%s) Error: ', label, err);
+        cb(err);
+        return;
+      }
+      console.log('(%s) Result: ', label, result);
+      cb();
+    }
+    command(printResult);
+  };
+}
 
 nfc.open(function (err, dev) {
   console.log('Opened:', err, dev);
-  dev.setLedAndBuzzer({ red: true,
-                        green: false,
-                        blinkDuration: 500,
-                        blinkDutyCycle: 0.6,
-                        blinkCount: 3,
-                        buzzer: true }, function (err) {
-    if (err) {
-      console.log('Error blinking LED:', err);
+  async.series([
+    resultPrinter(function (cb) {
+      dev.setLedAndBuzzer({ red: true,
+                            green: false,
+                            blinkDuration: 500,
+                            blinkDutyCycle: 0.6,
+                            blinkCount: 3,
+                            buzzer: true },
+                          cb);
+    }, "setLedAndBuzzer"),
+    resultPrinter(function (cb) { dev.setCardBuzzer(true, cb) }, "buzzer"),
+    resultPrinter(function (cb) { dev.getDeviceFirmwareVersion(cb) }, "devFW"),
+    resultPrinter(function (cb) { dev.getChipFirmwareVersion(cb) }, "chipFW"),
+    resultPrinter(function (cb) { dev.setPICC(cb) }, "setPICC"),
+    ],
+    function doneCb(err, result) {
+      console.log('Done with async, sleeping 1.5s');
+      setTimeout(function () { console.log('Done'); }, 1500);
     }
-    dev.setCardBuzzer(true, function (err, result) {
-      console.log('err: %s, result: %s', err, result);
-      dev.getFirmwareVersion(function (err, version) {
-        console.log('Version:', version);
-        dev.setPICC(function (err, result) {
-          console.log('Set PICC:', err, result);
-          setTimeout(function () { console.log('timeout'); }, 5000);
-        });
-      });
-    });
-  });
+  );
 });
