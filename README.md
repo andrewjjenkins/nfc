@@ -144,14 +144,27 @@ result that looks like:
       iso18092: true,
       iso18443B: true,
       iso18443A: true,
-      raw : {
-        d503: 54531,
-        icRaw: 50,
-        verRaw: 1,
-        revRaw: 6,
-        supportRaw: 7,
-        errorStatusRaw: 144 }
-    }
+      raw : {  ... } }
+
+### pn53x.getGeneralStatus(cb)
+
+Gets the general status of the reader, including any tags present.  The pn53x
+can only see one tag at a time. The `raw` object is the bytes off the wire.
+The result looks like this if there is no tag present:
+
+    { tags: [],
+      field: false,
+      raw:  { ... } }
+
+If a tag is present, it will look like:
+
+    { tags: [ { rxRate: '106Kbps',
+                txRate: '106Kbps',
+                type: 'MiFare/RFA/ISO14443-3A/ISO14443-3B/ISO18092 passive 106Kbps',
+                raw: { ... } } ],
+      field: false,
+      raw: { ... } }
+
 
 LICENSE
 =======

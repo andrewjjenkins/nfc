@@ -49,6 +49,7 @@ nfc.open(function (err, dev) {
     resultPrinter(function (cb) { dev.setCardBuzzer(true, cb) }, "buzzer"),
     resultPrinter(function (cb) { dev.getDeviceFirmwareVersion(cb) }, "devFW"),
     resultPrinter(function (cb) { dev.getChipFirmwareVersion(cb) }, "chipFW"),
+    resultPrinter(function (cb) { dev.getGeneralStatus(cb) }, "status"),
     resultPrinter(function (cb) { dev.setPICC(cb) }, "setPICC"),
     ],
     function doneCb(err, result) {
